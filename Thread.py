@@ -49,14 +49,34 @@
 # t2.join()
 # print balance
 
-import threading,multiprocessing
+# import threading,multiprocessing
 
-def loop():
-	x = 0
-	while True:
-		x = x^1
-for i  in range(multiprocessing.cpu_count()):
-	t = threading.Thread(target=loop)
-	t.start()
+# def loop():
+# 	x = 0
+# 	while True:
+# 		x = x^1
+# for i  in range(multiprocessing.cpu_count()):
+# 	t = threading.Thread(target=loop)
+# 	t.start()
 
+
+#thread local
+import threading
+
+#create global ThreadLocal object
+local_school = threading.local()
+
+def process_student():
+	print 'Hello,%s (in %s)'%(local_school.student,threading.current_thread().name)
+
+def process_thread(name):
+	local_school.student = name
+	process_student()
+
+t1 = threading.Thread(target = process_thread,args=('Alice',),name='Thread-A')
+t2 = threading.Thread(target = process_thread,args=('Bob',),name='Thread-B')
+t1.start()
+t2.start()
+t1.join()
+t2.join()
 
